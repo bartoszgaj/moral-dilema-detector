@@ -224,6 +224,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
                 try {
                     scenarioModel = OntologyLogic.getModelFromOntology(factory, jTextFieldScenarioName.getText());
                 } catch (IllegalArgumentException exception) {
+                    System.out.println(exception.toString());
                     WarningWindow warningWindow = new WarningWindow(this, "There is no such scenario in owl file");
                     warningWindow.setVisible(true);
                     return;

@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 class BottomBar extends JPanel {
@@ -32,10 +33,23 @@ class BottomBar extends JPanel {
         super.paintComponent(g);
 
         // column 1
-        String time = model.getTime().toString().replace("()", "").replace("_", " ");
-        String weather = model.getWeather().toString().replace("()", "").replace("_", " ");
-        String speedLimit = model.getMainRoad().getRoadType().getHas_speed_limit_kmph().iterator().next().toString();
-        String mainVehicleSpeed = model.getVehicle().getSpeedX().iterator().next().toString();
+        String time = Optional.ofNullable(model.getTime()).map(x -> x.toString().replace("()", "").replace("_", " ")).orElse("-");
+        String weather = Optional.ofNullable(model.getWeather()).map(x-> x.toString().replace("()", "").replace("_", " ")).orElse("-");
+        String speedLimit = "-";
+        if(model.getMainRoad() != null) {
+            if(model.getMainRoad().getRoadType() != null) {
+                if(model.getMainRoad().getRoadType().getHas_speed_limit_kmph() != null) {
+                    speedLimit=  model.getMainRoad().getRoadType().getHas_speed_limit_kmph().iterator().next().toString();
+                }
+            }
+        }
+
+        String mainVehicleSpeed = "-";
+        if(model.getVehicle() != null) {
+            if(model.getVehicle().getSpeedX() != null) {
+                mainVehicleSpeed = model.getVehicle().getSpeedX().iterator().next().toString();
+            }
+        }
 
         String labelStr = "<html> time: %s <br>weather: %s <br>speed limit: %s km/h <br>main vehicle speed: %s km/h";
         labelStr = String.format(labelStr, time, weather, speedLimit, mainVehicleSpeed);

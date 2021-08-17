@@ -99,6 +99,7 @@ public class ScenarioReader {
                 setWeather(weather).
                 setTime(time).
                 setDriver(driver).
+                setMainRoad(mainRoad).
                 setVehicle(mainVehicle).
                 setPassengers(passengers).
                 setSurrounding(surrounding).build();
