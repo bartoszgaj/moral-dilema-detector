@@ -1,6 +1,8 @@
+from typing import List
+
 from common.carla_snapshot import CarlaSnapshot
 import Ice
-import adapter_ice
+from generated_py import adapter_ice
 from common.strings import *
 import scenario_describer.ScenarioGeneratror as sg
 import common.objects as obj
@@ -77,16 +79,16 @@ class ScenarioBuilder:
         self.__proxies_by_ids[scenario] = scenarioPrx
         return scenarioPrx
 
-    def __create_vehicles(self, vehicles: list[obj.Vehicle]):
+    def __create_vehicles(self, vehicles: List[obj.Vehicle]):
         self.__create_entity(vehicles, adapter_ice.ItemType.VEHICLE, adapter_ice.VehiclePrx, KEY_VEHICLE)
 
-    def __create_cyclist(self, cyclists: list[obj.Cyclist]):
+    def __create_cyclist(self, cyclists: List[obj.Cyclist]):
         self.__create_entity(cyclists, adapter_ice.ItemType.CYCLIST, adapter_ice.CyclistPrx, KEY_CYCLIST)
 
-    def __create_pedestrian(self, pedestrians: list[obj.Pedestrian]):
+    def __create_pedestrian(self, pedestrians: List[obj.Pedestrian]):
         self.__create_entity(pedestrians, adapter_ice.ItemType.PEDESTRIAN, adapter_ice.PedestrianPrx, KEY_PEDESTRIAN)
 
-    def __create_lane(self, lanes: list[obj.Lane]):
+    def __create_lane(self, lanes: List[obj.Lane]):
         for lane in lanes:
             lane_id = self.__managerPrx.create(adapter_ice.ItemType.LANE)
             lane.set_id(lane_id)
@@ -98,7 +100,7 @@ class ScenarioBuilder:
             self.__ids[KEY_LANE].append(lane_id)
             self.__proxies_by_ids[lane_id] = extended_proxy
 
-    def __create_road(self, roads: list[obj.Road]):
+    def __create_road(self, roads: List[obj.Road]):
         for road in roads:
             road_id = self.__managerPrx.create(adapter_ice.ItemType.ROAD)
             road.set_id(road_id)
@@ -110,13 +112,13 @@ class ScenarioBuilder:
             self.__ids[KEY_ROAD].append(road_id)
             self.__proxies_by_ids[road_id] = extended_proxy
 
-    def __create_delimiter(self, delimiters: list[obj.Delimiter]):
+    def __create_delimiter(self, delimiters: List[obj.Delimiter]):
         self.__create_road_point(delimiters, adapter_ice.ItemType.DELIMITER, adapter_ice.DelimiterPrx, KEY_DELIMITER)
 
-    def __create_junction(self, junctions: list[obj.Junction]):
+    def __create_junction(self, junctions: List[obj.Junction]):
         self.__create_road_point(junctions, adapter_ice.ItemType.JUNCTION, adapter_ice.JunctionPrx, KEY_JUNCTION)
 
-    def __create_entity(self, entities: list[obj.Entity], item_type, proxy_object,
+    def __create_entity(self, entities: List[obj.Entity], item_type, proxy_object,
                         ids_key):
         for entity in entities:
             entity_id = self.__managerPrx.create(item_type)
@@ -137,7 +139,7 @@ class ScenarioBuilder:
             else:
                 pass
 
-    def __create_road_point(self, roadpoints: list[obj.RoadPoint], item_type,
+    def __create_road_point(self, roadpoints: List[obj.RoadPoint], item_type,
                             proxy_object, ids_key):
         for roadpoint in roadpoints:
             rp_id = self.__managerPrx.create(item_type)
@@ -151,7 +153,7 @@ class ScenarioBuilder:
             self.__ids[ids_key].append(rp_id)
             self.__proxies_by_ids[rp_id] = extended_proxy
 
-    def __create_road_attributes(self, attributes: list[obj.RoadAttributes]):
+    def __create_road_attributes(self, attributes: List[obj.RoadAttributes]):
         for attribute in attributes:
             at_id = self.__managerPrx.create(adapter_ice.ItemType.ROADATTRIBUTES)
             base = self.__communicator.stringToProxy(sg.getInternetAddress(at_id))
@@ -170,7 +172,7 @@ class ScenarioBuilder:
             self.__ids[KEY_ROADATTRIBUTE].append(at_id)
             self.__proxies_by_ids[at_id] = extended_proxy
 
-    def __create_lane_boundary(self, boundaries: list[obj.LaneBoundary]):
+    def __create_lane_boundary(self, boundaries: List[obj.LaneBoundary]):
         for boundary in boundaries:
             bd_id = self.__managerPrx.create(adapter_ice.ItemType.LANEBOUNDARY)
             boundary.set_id(bd_id)

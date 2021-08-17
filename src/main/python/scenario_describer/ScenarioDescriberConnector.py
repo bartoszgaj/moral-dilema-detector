@@ -1,7 +1,7 @@
 import sys
 import Ice
 
-import adapter_ice
+from generated_py import adapter_ice
 
 
 class ScenarioDescriberConnector:
