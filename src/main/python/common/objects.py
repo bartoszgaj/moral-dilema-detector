@@ -215,3 +215,16 @@ class Speed:
 
     def as_tuple(self):
         return self.__spX, self.__spY
+
+
+class Weather(BaseItem):
+    def __init__(self, identifier, temperature, wind):
+        super().__init__(identifier)
+        self.__temperature = temperature
+        self.__wind = wind
+
+    def get_temperature(self):
+        return self.__temperature
+
+    def get_wind(self):
+        return self.__wind

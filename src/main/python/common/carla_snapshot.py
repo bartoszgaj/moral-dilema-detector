@@ -16,6 +16,7 @@ class CarlaSnapshot:
         self.__road_attributes: List[obj.RoadAttributes] = objects[KEY_ROADATTRIBUTE]
         self.__road_points: List[obj.RoadPoint] = objects[KEY_ROADPOINT]
         self.__laneboundary: List[obj.LaneBoundary] = objects[KEY_LANEBOUNDARY]
+        self.__weather: obj.Weather = objects[KEY_WEATHER]
 
     def get_vehicles(self) -> List[obj.Vehicle]:
         return self.__vehicles
@@ -46,3 +47,6 @@ class CarlaSnapshot:
 
     def get_laneboundary(self) -> List[obj.LaneBoundary]:
         return self.__laneboundary
+
+    def get_weather(self) -> obj.Weather:
+        return self.__weather

@@ -56,8 +56,21 @@ public class OntologyService {
 
         BaseItemImpl item = null;
 
-        String uuid = UUID.randomUUID().toString();
-        String id = type.toString() + "-" + uuid;
+//        String uuid = UUID.randomUUID().toString();
+        boolean flag = true;
+        String my_id = "303";
+        String baseId = my_id + "_" + type.toString().toLowerCase(Locale.ROOT);
+        String id = baseId;
+        if(type == ItemType.LANE && flag) {
+            flag = false;
+            id = my_id + "_lane_0";
+        }
+        int xd = 0;
+        while(loadedItems.containsKey(id)){
+            ++xd;
+            id = baseId +  "_" + xd;
+
+        }
 
 
         switch (type) {
@@ -90,6 +103,9 @@ public class OntologyService {
                 break;
             case ROADATTRIBUTES:
                 item = new RoadAttributesImpl(id, myFactory.createRoad_attributes(id), this);
+                break;
+            case WEATHER:
+                item = new WeatherImpl(id, myFactory.createSunny(id), this);
                 break;
         }
 

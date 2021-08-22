@@ -15,7 +15,8 @@ module adapter
     DELIMITER,
     JUNCTION,
     LANEBOUNDARY,
-    ROADATTRIBUTES
+    ROADATTRIBUTES,
+    WEATHER
   };
 
   interface BaseItem
@@ -127,6 +128,12 @@ module adapter
 
     void persist();
   };
+
+  interface Weather extends BaseItem
+    {
+      void setWind(string wind);
+      void setTemperature(string temperature);
+    };
 
 };
 

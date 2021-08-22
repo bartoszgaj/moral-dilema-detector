@@ -1,11 +1,13 @@
 from abc import ABC
+
+from common.objects import Weather
 from common.strings import *
 import random
 from carla_reader.Creators import create_entity, MapCreator
 
 
 def get_providers(world):
-    return [MapProvider(world), EntitiesProvider(world)]
+    return [MapProvider(world), EntitiesProvider(world), OtherProvider(world)]
 
 
 class AbstractProvider(ABC):
@@ -85,6 +87,33 @@ class MapProvider(AbstractProvider):
         lanes = self.__map_creator.lanes
         AbstractProvider.lanes = lanes
         return lanes
+
+
+class OtherProvider(AbstractProvider):
+    map_precision = 0.02
+    max_distance = 50
+
+    def __init__(self, world):
+        super().__init__(world)
+        self.__world = world
+        self.__map = world.get_map()
+        self.__waypoints = self.__map.generate_waypoints(self.map_precision)
+        main_way_point = self.__map.get_waypoint(AbstractProvider.transform.location)
+        self.__map_creator = MapCreator(self.__map, main_way_point, self.max_distance)
+
+    def provide(self):
+        return (ATOM_OTHER, {
+            KEY_WEATHER: self.__get_weather(),
+        })
+
+    def keys(self):
+        return [
+            KEY_WEATHER,
+        ]
+
+    def __get_weather(self):
+        return Weather("", 10, 10)
+        # return self.__world.get_weather()
 
 
 class EntitiesProvider(AbstractProvider):

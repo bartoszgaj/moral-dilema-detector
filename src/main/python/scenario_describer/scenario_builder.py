@@ -34,6 +34,11 @@ def set_lane_fields(proxy, lane: obj.Lane):
     proxy.setRoad(lane.get_road().get_id())
 
 
+# def set_weather_fields(proxy, weather: obj.Weather):
+#     # proxy.setWind(weather.get_wind())
+#     # proxy.setTemperature(weather.get_temperature())
+
+
 class ScenarioBuilder:
     __ids = {
         KEY_SCENARIO: [],
@@ -46,7 +51,8 @@ class ScenarioBuilder:
         KEY_JUNCTION: [],
         KEY_LANEBOUNDARY: [],
         KEY_ROADATTRIBUTE: [],
-        KEY_ROADPOINT: []
+        KEY_ROADPOINT: [],
+        KEY_WEATHER: []
     }
 
     __proxies_by_ids = {}
@@ -68,6 +74,7 @@ class ScenarioBuilder:
         self.__create_vehicles(snapshot.get_vehicles())
         self.__create_cyclist(snapshot.get_cyclists())
         self.__create_pedestrian(snapshot.get_pedestrians())
+        self.__create_weather(snapshot.get_weather())
         self.__managerPrx.persist()
         print("ontology persisted")
 
@@ -191,3 +198,37 @@ class ScenarioBuilder:
 
     def get_proxies(self):
         return self.__proxies_by_ids
+
+    def __create_weather(self, weather: obj.Weather):
+        weather_id = self.__managerPrx.create(adapter_ice.ItemType.WEATHER)
+        weather.set_id(weather_id)
+        base = self.__communicator.stringToProxy(sg.getInternetAddress(weather_id))
+        extended_proxy = adapter_ice.WeatherPrx.checkedCast(base)
+
+        # set_weather_fields(extended_proxy, weather)
+
+        self.__ids[KEY_WEATHER].append(weather_id)
+        self.__proxies_by_ids[weather_id] = extended_proxy
+        # self.scPrx.addWeather(weather_id)  #addVehicle  to wywalamy narazie - ajkbyco trzeba ice przerobic
+
+
+    def __create_time(self, entities: List[obj.Entity], item_type, proxy_object,
+                         ids_key):
+        for entity in entities:
+            entity_id = self.__managerPrx.create(item_type)
+            entity.set_id(entity_id)
+            base = self.__communicator.stringToProxy(sg.getInternetAddress(entity_id))
+            extended_proxy = proxy_object.checkedCast(base)
+
+            set_entity_fields(extended_proxy, entity)
+
+            self.__ids[ids_key].append(entity_id)
+            self.__proxies_by_ids[entity_id] = extended_proxy
+            if ids_key == KEY_VEHICLE:
+                self.scPrx.addVehicle(entity_id)
+            elif ids_key == KEY_PEDESTRIAN:
+                self.scPrx.addPedestrian(entity_id)
+            elif ids_key == KEY_CYCLIST:
+                self.scPrx.addCyclist(entity_id)
+            else:
+                pass

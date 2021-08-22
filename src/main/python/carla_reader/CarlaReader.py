@@ -1,5 +1,6 @@
 import carla_reader.CarlaConnector as Connector
 import carla_reader.Providers as Providers
+from common.objects import Weather
 from common.strings import *
 from carla_reader.Providers import EntitiesProvider
 from common.carla_snapshot import CarlaSnapshot
@@ -23,12 +24,13 @@ class CarlaReader:
 
         self.__map_objects = [x[1] for x in provided_vals if x[0] is ATOM_MAP][0]
         self.__entity_objects = [x[1] for x in provided_vals if x[0] is ATOM_ENTITY][0]
+        self.__other_objects = [x[1] for x in provided_vals if x[0] is ATOM_OTHER][0]
 
-        self.__initial_snapshot = CarlaSnapshot({**self.__map_objects, **self.__entity_objects})
+        self.__initial_snapshot = CarlaSnapshot({**self.__map_objects, **self.__entity_objects, **self.__other_objects}, )
         self.__current_snapshot = self.__initial_snapshot
 
     def update_actors(self):
-        self.__current_snapshot = CarlaSnapshot({**self.__entity_provider.provide()[1], **self.__map_objects})
+        self.__current_snapshot = CarlaSnapshot({**self.__entity_provider.provide()[1], **self.__map_objects, **self.__other_objects})
 
     def get_snapshot(self):
         return self.__current_snapshot

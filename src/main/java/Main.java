@@ -55,7 +55,7 @@ public class Main {
 
         for(int i=0; i<1; i++) {
 //            Model scenarioModel = getModelFromGenerator(factory);
-            Model scenarioModel = getModelFromReader(factory,235);
+            Model scenarioModel = getModelFromReader(factory,188);
 
 //            new ScenarioFactory(scenarioModel, factory)
 //                    .pedestrianOnCrossing(new int[]{10}, new double[]{1});
