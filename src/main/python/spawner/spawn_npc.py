@@ -43,6 +43,7 @@ def saveFile(scenario, ontology_id):
         for passenger in vehicle.passengers:
             f.write("PASSENGER: ")
             f.write(passenger.identifier + " ")
+            f.write(str(vehicle.identifier) + " ")
             f.write(str(passenger.seat) + " ")
             f.write(str(passenger.seat_belts) + " ")
             f.write(str(passenger.age) + " ")
