@@ -2510,6 +2510,7 @@
     <!-- http://webprotege.stanford.edu/pedestrian -->
 
     <owl:Class rdf:about="http://webprotege.stanford.edu/pedestrian">
+        <rdfs:subClassOf rdf:resource="http://webprotege.stanford.edu/human"/>
         <rdfs:subClassOf rdf:resource="http://webprotege.stanford.edu/living_entity"/>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">pedestrian</rdfs:label>
     </owl:Class>
@@ -3318,6 +3319,7 @@
     <!-- http://webprotege.stanford.edu/project/BDGSqwMbfBgw7pUJ8IOnJ1#cyclist -->
 
     <owl:Class rdf:about="http://webprotege.stanford.edu/project/BDGSqwMbfBgw7pUJ8IOnJ1#cyclist">
+        <rdfs:subClassOf rdf:resource="http://webprotege.stanford.edu/human"/>
         <rdfs:subClassOf rdf:resource="http://webprotege.stanford.edu/living_entity"/>
     </owl:Class>
     
