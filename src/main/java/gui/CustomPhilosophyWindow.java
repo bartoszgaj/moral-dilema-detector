@@ -29,7 +29,7 @@ public abstract class CustomPhilosophyWindow extends JFrame {
     }
 
     protected Object[][] prepareData(CustomPhilosophy customPhilosophy) {
-        HashMap<PhilosophyParameter, Integer> parameters = customPhilosophy.getParameters();
+        HashMap<PhilosophyParameter, Float> parameters = customPhilosophy.getParameters();
         Object[][] data = {
                 {"Human life inside main vehicle", parameters.get(PhilosophyParameter.HUMAN_LIFE_INSIDE_MAIN_VEHICLE)},
                 {"Human life outside main vehicle", parameters.get(PhilosophyParameter.HUMAN_LIFE_OUTSIDE_MAIN_VEHICLE)},
@@ -42,19 +42,35 @@ public abstract class CustomPhilosophyWindow extends JFrame {
                 {"Animal lightly injury", parameters.get(PhilosophyParameter.ANIMAL_LIGHTLY_INJURY)},
                 {"Material damages per 1000$", parameters.get(PhilosophyParameter.MATERIAL_VALUE)},
                 {"Taking action", parameters.get(PhilosophyParameter.TAKING_ACTION)},
-                {"Dilemma threshold", parameters.get(PhilosophyParameter.DILEMMA_THRESHOLD)}
+                {"Dilemma threshold", parameters.get(PhilosophyParameter.DILEMMA_THRESHOLD)},
+                {"Human life ratio", parameters.get(PhilosophyParameter.HUMAN_LIFE_RATIO)},
+                {"Human severe injury ratio", parameters.get(PhilosophyParameter.HUMAN_SEVERE_INJURY_RATIO)},
+                {"Human lightly injury ratio", parameters.get(PhilosophyParameter.HUMAN_LIGHTLY_INJURY_RATIO)},
+                {"Age addition ratio", parameters.get(PhilosophyParameter.AGE_ADDITION_RATIO)},
+                {"Health addition ratio", parameters.get(PhilosophyParameter.HEALTH_ADDITION_RATIO)},
+                {"Weight addition ratio", parameters.get(PhilosophyParameter.WEIGHT_ADDITION_RATIO)},
+                {"Fitness addition ratio", parameters.get(PhilosophyParameter.FITNESS_ADDITION_RATIO)},
+                {"Children addition ratio", parameters.get(PhilosophyParameter.CHILDREN_ADDITION_RATIO)},
         };
         return data;
     }
 
 
-    protected HashMap<String, Integer> getTableValues() {
-        HashMap<String, Integer> result = new HashMap<>();
+    protected HashMap<String, Float> getTableValues() {
+        HashMap<String, Float> result = new HashMap<>();
 
         for (int i = 0; i < jTable.getRowCount(); i++) {
-            result.put((String) jTable.getValueAt(i, 0), (Integer) jTable.getValueAt(i, 1));
+            result.put((String) jTable.getValueAt(i, 0), this.parse(jTable.getValueAt(i, 1)));
         }
         return result;
+    }
+
+    private Float parse(Object valueAt) {
+        System.out.println(valueAt);
+        if (valueAt instanceof String) {
+            return Float.valueOf( (String) valueAt);
+        } else
+            return (Float) valueAt;
     }
 
     protected DefaultTableModel getDefaultTableModel(Object[][] data) {
@@ -71,7 +87,7 @@ public abstract class CustomPhilosophyWindow extends JFrame {
     protected void prepareJTableToEditing() {
         jTable.setSurrendersFocusOnKeystroke(true);
         TableColumnModel tableColumnModel = jTable.getColumnModel();
-        tableColumnModel.getColumn(1).setCellEditor(new SpinnerEditor());
+        tableColumnModel.getColumn(1).setCellEditor(new DefaultCellEditor(new JTextField()));
 
         tableColumnModel.getColumn(0).setPreferredWidth(250);
         tableColumnModel.getColumn(1).setPreferredWidth(75);

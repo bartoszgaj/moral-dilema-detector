@@ -83,7 +83,7 @@ public class SpinnerEditor extends DefaultCellEditor {
             editor.commitEdit();
             spinner.commitEdit();
 
-            int currentValue = (Integer) spinner.getValue();
+            Float currentValue = (float) spinner.getValue();
             if (currentValue < 0) {
                 spinner.setValue(0);
                 JOptionPane.showMessageDialog(null,

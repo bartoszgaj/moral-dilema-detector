@@ -85,8 +85,9 @@ public class DilemmaDetector {
     public void calculateDecisionCosts() {
         Set<Decision> decisions = OntologyLogic.getCollidedEntities(consequenceContainer, factory, model).keySet();
 
+        //Unused probably
         DecisionCostCalculator decisionCostCalculator =
-                new DecisionCostCalculator(consequenceContainer, factory, philosophy);
+                new DecisionCostCalculator(consequenceContainer, factory, philosophy, true);
 
         decisionCosts.clear();
 
@@ -96,7 +97,7 @@ public class DilemmaDetector {
     }
 
     public boolean containsMoralDilemma(){
-        int dilemmaThreshold = philosophy.getParameters().get(PhilosophyParameter.DILEMMA_THRESHOLD);
+        int dilemmaThreshold = Math.round(philosophy.getParameters().get(PhilosophyParameter.DILEMMA_THRESHOLD));
         bestDecision = getBestDecision(dilemmaThreshold);
         return bestDecision == null;
     }
@@ -113,8 +114,9 @@ public class DilemmaDetector {
         factory = scenarioReader.getFactory();
         consequenceContainer = new ConsequenceContainer(factory);
         decisionGenerator = new DecisionGenerator(factory, BASE_IRI);
+        //unused probably
         decisionCostCalculator =
-                new DecisionCostCalculator(consequenceContainer, factory, philosophy);
+                new DecisionCostCalculator(consequenceContainer, factory, philosophy, true);
     }
 
     private void loadScenarioByName(int scenarioNumber) {

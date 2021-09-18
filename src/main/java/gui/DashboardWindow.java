@@ -52,6 +52,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
     private JScrollPane jScrollPaneWithResults;
     private JCheckBox jCheckBoxEnableBraking;
     private JCheckBox jCheckBoxSaveResultsInOntology;
+    private JCheckBox jCheckBoxUseDataExchange;
     private JTable jTableWithResults;
     private JTable jTableWithMoralResult;
     private JScrollPane jScrollPaneWithMoralResult;
@@ -69,7 +70,8 @@ public class DashboardWindow extends JFrame implements ActionListener {
             "Scenario with animals",
             "Scenario with crosswalk"));
     private final int IMAGE_WIDTH = 820;
-    private final int IMAGE_HEIGHT = 400;
+    private final int XD = 300;
+    private final int IMAGE_HEIGHT = 400 - XD;
     private final int CENTER_CUSTOM_PHILOSOPHIES = 90;
     private final String PATH_CUSTOM_PHILOSOPHIES = "\\src\\main\\resources\\gui\\customPhilosophies\\";
     private final String PATH_BLANK_SCENARIO = "\\src\\main\\resources\\gui\\Example_scenario.png";
@@ -97,7 +99,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
         factory = OntologyLogic.getFactory(OntologyLogic.defaultPathToOntology);
 
         setSize(880, 800);
-        setResizable(false);
+        setResizable(true);
         setTitle("Moral dilemma detector");
         setLayout(null);
 
@@ -143,13 +145,17 @@ public class DashboardWindow extends JFrame implements ActionListener {
 
 
         jCheckBoxEnableBraking = new JCheckBox("Enable braking", true);
-        jCheckBoxEnableBraking.setBounds(20, 500, 180, 20);
+        jCheckBoxEnableBraking.setBounds(20, 500 - XD, 180, 20);
         add(jCheckBoxEnableBraking);
 
         jCheckBoxSaveResultsInOntology = new JCheckBox("Save results to ontology", true);
         jCheckBoxSaveResultsInOntology.setToolTipText("<html>It's recommended option to persist results. <br> Based on that You may create SWRL rules in Protege</html>");
-        jCheckBoxSaveResultsInOntology.setBounds(20, 520, 180, 20);
+        jCheckBoxSaveResultsInOntology.setBounds(20, 520 - XD, 180, 20);
         add(jCheckBoxSaveResultsInOntology);
+
+        jCheckBoxUseDataExchange = new JCheckBox("Use data exchange", true);
+        jCheckBoxUseDataExchange.setBounds(20, 540 - XD, 180, 20);
+        add(jCheckBoxUseDataExchange);
 
         /*
         jLabelSelectPhilosophyPrompt = new JLabel("Select custom philosophy");
@@ -157,31 +163,31 @@ public class DashboardWindow extends JFrame implements ActionListener {
         add(jLabelSelectPhilosophyPrompt);
          */
         jButtonAddCustomPhilosophy = new JButton("Add new");
-        jButtonAddCustomPhilosophy.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 570, 500, 150, 30);
+        jButtonAddCustomPhilosophy.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 570, 500 - XD, 150, 30);
         jButtonAddCustomPhilosophy.addActionListener(this);
         add(jButtonAddCustomPhilosophy);
 
         jComboBoxCustomPhilosophies = new JComboBox(getCustomPhilosophiesNames().toArray());
-        jComboBoxCustomPhilosophies.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 220, 500, 200, 30);
+        jComboBoxCustomPhilosophies.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 220, 500 - XD, 200, 30);
         add(jComboBoxCustomPhilosophies);
 
         jButtonCustomPhilosophyShowDetails = new JButton("Show details");
-        jButtonCustomPhilosophyShowDetails.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 420, 500, 150, 30);
+        jButtonCustomPhilosophyShowDetails.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 420, 500 - XD, 150, 30);
         jButtonCustomPhilosophyShowDetails.addActionListener(this);
         add(jButtonCustomPhilosophyShowDetails);
 
         jButtonCalculate = new JButton("Calculate");
-        jButtonCalculate.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 420, 530, 300, 30);
+        jButtonCalculate.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 420, 530 - XD, 300, 30);
         jButtonCalculate.addActionListener(this);
         add(jButtonCalculate);
 
         jButtonSetOrderOfDecisions = new JButton("Set order of decision");
-        jButtonSetOrderOfDecisions.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 220, 530, 200, 30);
+        jButtonSetOrderOfDecisions.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 220, 530 - XD, 200, 30);
         jButtonSetOrderOfDecisions.addActionListener(this);
         add(jButtonSetOrderOfDecisions);
 
         jLabelBestDecision = new JLabel("");
-        jLabelBestDecision.setBounds(50, 600, 400, 30);
+        jLabelBestDecision.setBounds(50, 600 - XD, 400, 30);
         jLabelBestDecision.setVisible(false);
         add(jLabelBestDecision);
     }
@@ -350,7 +356,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
                 CustomPhilosophy customPhilosophy = getCustomPhilosophyByName(philosophyName);
 
 
-                DecisionCostCalculator decisionCostCalculator = new DecisionCostCalculator(consequenceContainer, factoryForCalculator, customPhilosophy);
+                DecisionCostCalculator decisionCostCalculator = new DecisionCostCalculator(consequenceContainer, factoryForCalculator, customPhilosophy, jCheckBoxUseDataExchange.isSelected());
 
 
                 for (Decision decision : collidedEntities.keySet()) {
@@ -364,7 +370,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
                 }
 
                 String bestDecision = OntologyLogic.getOptimumDecision(decisionCosts);
-                int dilemmaThreshold = customPhilosophy.getParameters().get(PhilosophyParameter.DILEMMA_THRESHOLD);
+                int dilemmaThreshold = Math.round(customPhilosophy.getParameters().get(PhilosophyParameter.DILEMMA_THRESHOLD));
                 boolean isMoralDilemma = decisionCosts.get(bestDecision) > dilemmaThreshold ? true : false;
                 String isMoralDilemmaString = isMoralDilemma ? "YES" : "NO";
                 if (jTableWithMoralResult != null) {
@@ -375,14 +381,14 @@ public class DashboardWindow extends JFrame implements ActionListener {
                     jTableWithMoralResult = new JTable(prepareDefaultModel("Moral dilemma", isMoralDilemmaString));
                     centerValuesInTable(jTableWithMoralResult);
                     jScrollPaneWithMoralResult = new JScrollPane(jTableWithMoralResult);
-                    jScrollPaneWithMoralResult.setBounds(20, 600, 250, oneRowJTableHeight);
+                    jScrollPaneWithMoralResult.setBounds(20, 600 - XD, 250, oneRowJTableHeight);
                     add(jScrollPaneWithMoralResult);
 
                     jTableWithBestDecision =
                             new JTable(prepareDefaultModel("Optimum decision", prepareDecisionNameToDisplay(bestDecision)));
                     centerValuesInTable(jTableWithBestDecision);
                     jScrollPaneWithBestDecision = new JScrollPane(jTableWithBestDecision);
-                    jScrollPaneWithBestDecision.setBounds(20, 600 + oneRowJTableHeight, 250, oneRowJTableHeight);
+                    jScrollPaneWithBestDecision.setBounds(20, 600 + oneRowJTableHeight - XD, 250, oneRowJTableHeight);
                     add(jScrollPaneWithBestDecision);
                 }
 
@@ -443,7 +449,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
                     jScrollPaneWithResults = new JScrollPane(jTableWithResults);
                     int jScrollPanelHeight = (jTableWithResults.getRowCount() + 1) * jTableWithResults.getRowHeight() + 7;
                     if (jScrollPanelHeight > 150) jScrollPanelHeight = 150;
-                    jScrollPaneWithResults.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 220, 600, 400, jScrollPanelHeight);
+                    jScrollPaneWithResults.setBounds(CENTER_CUSTOM_PHILOSOPHIES + 220, 600 - XD, 400, jScrollPanelHeight);
                     add(jScrollPaneWithResults);
                 }
             }

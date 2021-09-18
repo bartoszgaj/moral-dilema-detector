@@ -72,7 +72,7 @@ public class AddCustomPhilosophyWindow extends CustomPhilosophyWindow implements
             } else {
                 CustomPhilosophy customPhilosophy = new CustomPhilosophy();
                 customPhilosophy.setPhilosophyName(philosophyName);
-                HashMap<String, Integer> tableValues = getTableValues();
+                HashMap<String, Float> tableValues = getTableValues();
                 customPhilosophy.setParametersFromHashMap(tableValues);
                 String philosophyJSON = mapObjectToJSON(customPhilosophy);
 

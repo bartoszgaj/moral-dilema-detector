@@ -68,7 +68,7 @@ public class ModifyCustomPhilosophyWindow extends CustomPhilosophyWindow impleme
     }
 
     private void jButtonSaveChangesAction() {
-        HashMap<String, Integer> tableValues = getTableValues();
+        HashMap<String, Float> tableValues = getTableValues();
         customPhilosophy.setParametersFromHashMap(tableValues);
         String philosophyJSON = mapObjectToJSON(customPhilosophy);
         try (FileWriter file = new FileWriter(getFullPathOfFileForGivenPhilosophyName(customPhilosophy.getPhilosophyName()))) {
