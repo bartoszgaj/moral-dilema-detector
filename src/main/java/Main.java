@@ -70,7 +70,7 @@ public class Main {
             CollisionConsequencePredictor collisionConsequencePredictor =
                     new CollisionConsequencePredictor(consequenceContainer, factory);
 
-            SimulatorEngine simulatorEngine = new SimulatorEngine(scenarioModel, collisionConsequencePredictor, factory);
+            SimulatorEngine simulatorEngine = new SimulatorEngine(scenarioModel, collisionConsequencePredictor, factory, true);
             Map<Decision, Set<Actor>> collidedEntities = simulatorEngine.simulateAll();
             System.out.println("Collided entities:");
             for(Map.Entry<Decision, Set<Actor>> entry : collidedEntities.entrySet()){

@@ -81,9 +81,9 @@ public class DilemmaDetector {
 
         calculateDecisionCosts();
     }
-
+    //probably unused
     public void calculateDecisionCosts() {
-        Set<Decision> decisions = OntologyLogic.getCollidedEntities(consequenceContainer, factory, model).keySet();
+        Set<Decision> decisions = OntologyLogic.getCollidedEntities(consequenceContainer, factory, model, true).keySet();
 
         //Unused probably
         DecisionCostCalculator decisionCostCalculator =
@@ -118,14 +118,14 @@ public class DilemmaDetector {
         decisionCostCalculator =
                 new DecisionCostCalculator(consequenceContainer, factory, philosophy, true);
     }
-
+    //probably unused
     private void loadScenarioByName(int scenarioNumber) {
         if (scenarioReader == null){
             System.out.println("ERROR: Ontology not loaded, call loadOntology() first.");
         }
         model = scenarioReader.getModelWithVisualisation(scenarioNumber);
         collisionConsequencePredictor = new CollisionConsequencePredictor(consequenceContainer, factory);
-        simulatorEngine = new SimulatorEngine(model, collisionConsequencePredictor, factory);
+        simulatorEngine = new SimulatorEngine(model, collisionConsequencePredictor, factory, true);
     }
 
     private Map<String, Integer> getDecisionCostMapByString(){

@@ -3,6 +3,7 @@ package DilemmaDetector.Simulator;
 import DilemmaDetector.Consequences.CollisionConsequencePredictor;
 import generator.Model;
 import project.*;
+import project.impl.DefaultSunny;
 
 import java.util.*;
 
@@ -17,6 +18,7 @@ public class SimulatorEngine {
 
 
     private Model model;
+    private boolean exchangedData;
 
     private List<Actor> actors;
     private List<Actor> surroundingActors;
@@ -27,12 +29,12 @@ public class SimulatorEngine {
     private CollisionConsequencePredictor consequencePredictor;
     private FactoryWrapper factoryWrapper;
 
-    public SimulatorEngine(Model model, CollisionConsequencePredictor consequencePredictor, OWLFactory factory) {
+    public SimulatorEngine(Model model, CollisionConsequencePredictor consequencePredictor, OWLFactory factory, boolean exchangedData) {
         this.model = model;
         this.consequencePredictor = consequencePredictor;
         this.mainVehicle = new Actor(model.getVehicle(), RigidBodyMapper.rigidBodyForMainVehicle(model.getVehicle()), true);
         this.mainVehicle.setValueInDollars(RigidBodyMapper.getValueInDollars(model.getVehicle()));
-
+        this.exchangedData = exchangedData;
         this.factoryWrapper = new FactoryWrapper(factory);
         this.surroundingActors = RigidBodyMapper.createSurroundingActors(model);
         this.actors = RigidBodyMapper.createActors(factoryWrapper, model);
@@ -75,16 +77,20 @@ public class SimulatorEngine {
                             " = " + mainVehicle.getRigidBody().getSpeed().getMagnitude() +
                             " | Acc: " + mainVehicle.getRigidBody().getAcceleration());
 
+            Weather weather = null;
+            if (exchangedData) {
+                weather = model.getWeather();
+            }
 
             if (action instanceof Turn_left) {
-                BasicActionsApplier.CarTurning(mainVehicle.getRigidBody(), model.getWeather(), false);
+                BasicActionsApplier.CarTurning(mainVehicle.getRigidBody(), weather, false);
             } else if (action instanceof Turn_right) {
-                BasicActionsApplier.CarTurning(mainVehicle.getRigidBody(), model.getWeather(), true);
+                BasicActionsApplier.CarTurning(mainVehicle.getRigidBody(), weather, true);
             } else if (action instanceof Stop) {
-                BasicActionsApplier.CarBraking(mainVehicle.getRigidBody(), model.getWeather());
+                BasicActionsApplier.CarBraking(mainVehicle.getRigidBody(), weather);
             } else if (action instanceof Change_lane){
                 int laneNumber = ((Change_lane)action).getLane_change_by().iterator().next();
-                changeLaneActionApplier.CarChangeLanes(mainVehicle.getRigidBody(), model.getWeather(), 0, laneNumber, laneWidth);
+                changeLaneActionApplier.CarChangeLanes(mainVehicle.getRigidBody(), weather, 0, laneNumber, laneWidth);
             }
 
             mainVehicle.getRigidBody().update(TIME_PART);

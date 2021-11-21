@@ -246,7 +246,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
                                 + pictureName));
 
                 consequenceContainer = new ConsequenceContainer(factory);
-                collidedEntities = OntologyLogic.getCollidedEntities(consequenceContainer, factory, scenarioModel);
+                collidedEntities = OntologyLogic.getCollidedEntities(consequenceContainer, factory, scenarioModel, jCheckBoxUseDataExchange.isSelected());
                 consequenceContainer.saveConsequencesToOntology();
 
                 saveToOntologyAccordingToCheckbox();
@@ -318,7 +318,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
                             + pictureName));
 
             consequenceContainer = new ConsequenceContainer(factory);
-            collidedEntities = OntologyLogic.getCollidedEntities(consequenceContainer, factory, scenarioModel);
+            collidedEntities = OntologyLogic.getCollidedEntities(consequenceContainer, factory, scenarioModel, jCheckBoxUseDataExchange.isSelected());
             consequenceContainer.saveConsequencesToOntology();
 
             saveToOntologyAccordingToCheckbox();

@@ -48,6 +48,10 @@ public class BasicActionsApplier {
 
     //Data from http://www.modlab.lv/klimats/produkti/road/Road_notebook.html
     static private double getTireRoadFriction(Weather weather){
+
+        if (weather == null ) {
+            return 0.9;
+        }
         double result;
         if(weather instanceof Sunny){
             result = 0.9;
