@@ -15,6 +15,9 @@ import time
 
 from spawner.entity.subentity.Sex import Sex
 from spawner.scenarios.ScenarioA1 import ScenarioA1
+from spawner.scenarios.ScenarioA2 import ScenarioA2
+from spawner.scenarios.ScenarioB1 import ScenarioB1
+from spawner.scenarios.ScenarioB2 import ScenarioB2
 
 try:
     sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
@@ -152,10 +155,14 @@ def main():
         # Spawn vehicles
         # --------------
         batch = []
+        first = True
         for vehicle in scenario.get_vehicles():
             blueprint = car
             if blueprint.has_attribute('color'):
                 color = random.choice(blueprint.get_attribute('color').recommended_values)
+                if first:
+                    color = '0, 0, 255'
+                    first = False
                 blueprint.set_attribute('color', color)
 
             batch.append(SpawnActor(blueprint, Transform(
@@ -178,7 +185,7 @@ def main():
                 vehicles_list.append(response.actor_id)
                 print(type(response))
                 print("spawned vehicle " + str(response.actor_id))
-
+        batch = []
         for pedestrian in scenario.get_pedestrians():
             blueprint = manWalker if pedestrian.sex == Sex.MALE else womanWalker
 
@@ -201,6 +208,7 @@ def main():
             else:
                 walkers_list.append(response.actor_id)
                 print("spawned pedestrian " + str(response.actor_id))
+        batch = []
 
         # There is only one model of bike, so it always need to be male
         for biker in scenario.get_bikers():

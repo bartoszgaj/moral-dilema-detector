@@ -70,7 +70,7 @@ public class DashboardWindow extends JFrame implements ActionListener {
             "Scenario with animals",
             "Scenario with crosswalk"));
     private final int IMAGE_WIDTH = 820;
-    private final int XD = 300;
+    private final int XD = 0;
     private final int IMAGE_HEIGHT = 400 - XD;
     private final int CENTER_CUSTOM_PHILOSOPHIES = 90;
     private final String PATH_CUSTOM_PHILOSOPHIES = "\\src\\main\\resources\\gui\\customPhilosophies\\";

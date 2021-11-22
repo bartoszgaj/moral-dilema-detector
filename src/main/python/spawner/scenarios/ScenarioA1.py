@@ -1,6 +1,6 @@
-from spawner.entity.Biker import Biker
 from spawner.entity.Environment import Environment
 from spawner.entity.Passenger import Passenger
+from spawner.entity.Pedestrian import Pedestrian
 from spawner.entity.Scenario import Scenario
 from spawner.entity.Vehicle import Vehicle
 from spawner.entity.subentity.Fitness import Fitness
@@ -19,7 +19,7 @@ class ScenarioA1(Scenario):
             "ScenarioA1",
             [
                 Vehicle("id",
-                        Transform(Location(102, -73, 15), Rotation(0, 2, 0)),
+                        Transform(Location(109, -73, 15), Rotation(0, 2, 0)),
                         [
                             Passenger("passengerId",
                                       Seat.DRIVER,
@@ -44,7 +44,7 @@ class ScenarioA1(Scenario):
                         ]
                         ),
                 Vehicle("id2",
-                        Transform(Location(112, -76.5, 15), Rotation(0, 181, 0)),
+                        Transform(Location(122, -76.5, 15), Rotation(0, 181, 0)),
                         [
                             Passenger("passengerId",
                                       Seat.DRIVER,
@@ -69,7 +69,7 @@ class ScenarioA1(Scenario):
                         ]
                         ),
                 Vehicle("id3",
-                        Transform(Location(102, -76.5, 15), Rotation(0, 2, 0)),
+                        Transform(Location(122, -73, 15), Rotation(0, 181, 0)),
                         [
                             Passenger("passengerId",
                                       Seat.DRIVER,
@@ -95,17 +95,17 @@ class ScenarioA1(Scenario):
                         ),
 
             ],
-            [
-                Biker("biker",
-                   Transform(Location(115, -76.5, 15), Rotation(0, 181, 0)),
-                   33,
-                   Sex.MALE,
-                   Health.Healthy,
-                   80,
-                   Fitness.Fit,
-                   False,
-                   SocialUsefullness.Useful)
-             ],
             [],
+            [Pedestrian(
+                "passengerId2",
+                Transform(Location(122, -69, 15), Rotation(0, 181, 0)),
+                33,
+                Sex.MALE,
+                Health.Healthy,
+                80,
+                Fitness.Fit,
+                False,
+                SocialUsefullness.Useful
+            )],
             Environment(temperature=30, humidity=3, brightness=1, slippery=1)
         )
